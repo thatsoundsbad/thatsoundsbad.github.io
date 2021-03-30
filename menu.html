@@ -1,0 +1,113 @@
+<html>
+<head>
+<link rel="stylesheet" href="1.css">
+</head>
+<body>
+   
+<div class="up">
+    <!-- <p><a href="2.html">Next</a>  -->
+<svg >
+    <!-- <a href="2.html">
+        <text x="50" y="90" text-anchor="middle">
+          Next
+        </text>
+      </a> -->
+    <defs>
+        <mask id="cursorMask" maskUnits="objectBoundingBox" maskContentUtils="objectBoundingBox">
+            <g>
+                <!-- the SECOND rect element is what determines the transparent area -->
+                <rect x="0" y="0" fill="#ffFFFF" />
+                <circle cx="0" cy="0" r="120" fill="#000000" />
+            </g>
+        </mask>
+    </defs>
+    <image id="black_image"  xlink:href="menu_up.jpg"/>
+    <!-- <div class="imgbox"> -->
+    
+    <!-- </div> -->
+</svg>
+</div>
+<div class="down">
+<image id="bg_image" src="menu_down.jpg"/>
+</div>
+
+<div class="button_menu">
+    <a class="menu_button" href="start.html">Start </a>
+    <a class="menu_button" href="1.html">Road traffic noise </a>
+    <a class="menu_button" href="2.html">Rail traffic noise </a>
+    <a class="menu_button" href="3.html">Air traffic noise </a></br>
+</div>
+
+<!-- <div class="top-middle">
+    <p><a href="1.html"> Prev </a>
+</div> -->
+
+<!-- <div class="top-left">
+    <p><a href="1.html"> Menu </a>
+</div> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script>
+
+//CIRCLE
+var img = document.getElementsByTagName("image")[0];
+var imgPos = img.getBoundingClientRect();
+var imgX = imgPos.left;
+var imgY = imgPos.top;
+var rect = document.getElementsByTagName("circle")[0];
+/* var rectHalfWidth = rect.getAttribute("r") / 10; */
+/* var rectHalfHeight = rect.getAttribute("r") / 10; */
+img.addEventListener("mousemove", function (e) {
+    rect.setAttribute("cx", e.clientX - imgX );
+    rect.setAttribute("cy", e.clientY - imgY );
+}, false);
+
+//AUDIO ==
+var audio = new Audio("train.mp3");
+var isClicked = false;
+function clickButton(elem) {
+    document.getElementById('ac-wrapper').style.display = "none";
+    console.log(elem);
+    audio.volume = 0;
+    commonMovingValue = 0;
+    if (isClicked) {
+        isClicked = false;
+        elem.value = "That sounds bad";
+        audio.pause();
+    } else {
+        isClicked = true;
+        elem.value = "sound off";
+        audio.play();
+    }
+}
+
+var previousX = 0;
+var previousY = 0;
+var commonMovingValue = 0;
+document.addEventListener("mousemove", function (e) {
+    if (isClicked) {
+        console.log(commonMovingValue)
+        
+        commonMovingValue = commonMovingValue + Math.abs(Math.abs(e.clientX) - previousX);
+        commonMovingValue = commonMovingValue + Math.abs(Math.abs(e.clientY) - previousY);
+        previousX = Math.abs(e.clientX);
+        previousY = Math.abs(e.clientY);
+        
+        audio.volume = Math.min(1, commonMovingValue / 15000);
+        console.log(audio.volume)
+        console.log(audio.started)
+    }
+}, false);
+
+audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+/// == AUDIO
+
+
+</script>
+</body>
+
+</html>

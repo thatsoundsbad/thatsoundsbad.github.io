@@ -1,0 +1,147 @@
+<html>
+<head>
+<link rel="stylesheet" href="1.css">
+</head>
+<body>
+   
+<div class="up">
+    <!-- <p><a href="2.html">Next</a>  -->
+<svg >
+    <!-- <a href="2.html">
+        <text x="50" y="90" text-anchor="middle">
+          Next
+        </text>
+      </a> -->
+    <defs>
+        <mask id="cursorMask" maskUnits="objectBoundingBox" maskContentUtils="objectBoundingBox">
+            <g>
+                <!-- the SECOND rect element is what determines the transparent area -->
+                <rect x="0" y="0" fill="#ffFFFF" />
+                <circle cx="0" cy="0" r="120" fill="#000000" />
+            </g>
+        </mask>
+    </defs>
+    <image id="black_image"  xlink:href="railup.jpg"/>
+    <!-- <div class="imgbox"> -->
+    
+    <!-- </div> -->
+</svg>
+</div>
+<div class="down">
+<image id="bg_image" src="raildown.jpg"/>
+</div>
+
+<div class="top-right">
+    <p><a class="nav_button" href="3.html">Next </a>
+</div>
+
+<div class="top-middle">
+    <p><a class="nav_button" href="1.html"> Prev </a>
+</div>
+
+<div class="top-left">
+    <p><a class="nav_button" href="menu.html"> Menu </a>
+</div>
+
+<div id="db">
+    0% Volume
+</div>
+
+<div id="ac-wrapper" style='display:none'>
+    <div id="popup">
+        <div class="ac-wrapper-content">
+        <center>
+             <h2>Environmental noise features among the top environmental risks to health, with an
+                estimated 1 million healthy years of life lost every year from health effects.</h2>
+                <div class="button">
+            <input type="button" onclick="clickButton(this);" value="THAT SOUNDS BAD" />
+                </div>
+        </center>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <input type="button" onclick="clickButton(this);" value="sound on"> -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+
+<script>
+
+
+//CIRCLE
+var img = document.getElementsByTagName("image")[0];
+var imgPos = img.getBoundingClientRect();
+var imgX = imgPos.left;
+var imgY = imgPos.top;
+var rect = document.getElementsByTagName("circle")[0];
+/* var rectHalfWidth = rect.getAttribute("r") / 10; */
+/* var rectHalfHeight = rect.getAttribute("r") / 10; */
+img.addEventListener("mousemove", function (e) {
+    rect.setAttribute("cx", e.clientX - imgX );
+    rect.setAttribute("cy", e.clientY - imgY );
+}, false);
+
+//AUDIO ==
+var audio = new Audio("train.mp3");
+var isClicked = false;
+function clickButton(elem) {
+    document.getElementById('ac-wrapper').style.display = "none";
+    console.log(elem);
+    audio.volume = 0;
+    commonMovingValue = 0;
+    if (isClicked) {
+        isClicked = false;
+        elem.value = "That sounds bad";
+        audio.pause();
+    } else {
+        isClicked = true;
+        elem.value = "sound off";
+        audio.play();
+    }
+}
+
+var previousX = 0;
+var previousY = 0;
+var commonMovingValue = 0;
+document.addEventListener("mousemove", function (e) {
+    if (isClicked) {
+        console.log(commonMovingValue)
+        
+        commonMovingValue = commonMovingValue + Math.abs(Math.abs(e.clientX) - previousX);
+        commonMovingValue = commonMovingValue + Math.abs(Math.abs(e.clientY) - previousY);
+        previousX = Math.abs(e.clientX);
+        previousY = Math.abs(e.clientY);
+        
+        audio.volume = Math.min(1, commonMovingValue / 15000);
+        // console.log(audio.volume)
+        // console.log(audio.started)
+        document.getElementById("db").innerHTML = String(Math.round(audio.volume * 100)) + "% Volume";
+    }
+}, false);
+
+audio.addEventListener('ended', function() {
+    this.currentTime = 0;
+    this.play();
+}, false);
+/// == AUDIO
+
+
+// POP UP
+function PopUp(hideOrshow) {
+    console.log("POP UP");
+    if (hideOrshow == 'hide') document.getElementById('ac-wrapper').style.display = "none";
+    else document.getElementById('ac-wrapper').removeAttribute('style');
+}
+
+window.onload = function () {
+    setTimeout(function () {
+        PopUp('show');
+    }, 0);
+}
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,3 @@
+Hello!
+
+Please, open menu.html in Google Chrome
